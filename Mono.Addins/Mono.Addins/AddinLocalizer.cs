@@ -27,7 +27,9 @@
 //
 
 using System;
+using System.Runtime.InteropServices.ComTypes;
 using Mono.Addins.Localization;
+using Mono.Addins.Mono.Addins.Localization;
 
 namespace Mono.Addins
 {
@@ -38,11 +40,15 @@ namespace Mono.Addins
 	{
 		IAddinLocalizer localizer;
 		IPluralAddinLocalizer pluralLocalizer;
+		IContextAddinLocalizer contextAddinLocalizer;
+		IPluralContextAddinLocalizer pluralContextAddinLocalizer;
 		
 		internal AddinLocalizer (IAddinLocalizer localizer)
 		{
 			this.localizer = localizer;
 			pluralLocalizer = localizer as IPluralAddinLocalizer;
+			contextAddinLocalizer = localizer as IContextAddinLocalizer;
+			pluralContextAddinLocalizer = localizer as IPluralContextAddinLocalizer;
 		}
 
 		/// <summary>
@@ -165,5 +171,64 @@ namespace Mono.Addins
 		{
 			return string.Format (GetPluralString (singular, defaultPlural, n), args);
 		}
+
+
+		public string GetParticularString(string context, string msgid)
+		{
+			if (contextAddinLocalizer != null)
+			{
+				return contextAddinLocalizer.GetParticularString(context, msgid);
+			}
+			else
+			{
+				return GetString (msgid);
+			}
+		}
+
+
+		public string GetParticularString(string context, string msgid, params string[] args)
+		{
+			return string.Format(GetParticularString (context, msgid), args);
+		}
+
+
+		public string GetParticularString(string context, string msgid, params object[] args)
+		{
+			return string.Format(GetParticularString(context, msgid), args);
+		}
+
+		
+		public string GetParticularPluralString(string context, string msgid, string msgidPlural, int n)
+		{
+			if (pluralContextAddinLocalizer != null)
+			{
+				return pluralContextAddinLocalizer.GetParticularPluralString(context, msgidPlural, msgidPlural, n);
+			}
+			else if (pluralLocalizer != null)
+			{
+				return pluralLocalizer.GetPluralString(msgid, msgidPlural, n);
+			}
+			else if (contextAddinLocalizer != null)
+			{
+				return contextAddinLocalizer.GetParticularString(context, msgid);
+			}
+			else
+			{
+				return localizer.GetString(msgid);
+			}
+		}
+
+		
+		public string GetParticularPluralString(string context, string msgid, string msgidPlural, int n, params string[] args)
+		{
+			return string.Format(GetParticularPluralString(context, msgid, msgidPlural, n), args);
+		}
+
+
+		public string GetParticularPluralString(string context, string msgid, string msgidPlural, int n, params object[] args)
+		{
+			return string.Format(GetParticularPluralString(context, msgid, msgidPlural, n), args);
+		}
+
 	}
 }

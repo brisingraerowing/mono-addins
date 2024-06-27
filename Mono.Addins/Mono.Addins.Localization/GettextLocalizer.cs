@@ -27,13 +27,16 @@
 
 using System;
 using Mono.Addins;
+using Mono.Addins.Mono.Addins.Localization;
 
 namespace Mono.Addins.Localization
 {
-	class GettextLocalizer: IAddinLocalizerFactory, IAddinLocalizer, IPluralAddinLocalizer
+	class GettextLocalizer: IAddinLocalizerFactory, IAddinLocalizer, IPluralAddinLocalizer, IContextAddinLocalizer, IPluralContextAddinLocalizer
 	{
 		GettextDomain domain;
-		
+
+		const string GETTEXT_CONTEXT_GLUE = "\u0004";
+
 		public IAddinLocalizer CreateLocalizer (RuntimeAddin addin, NodeElement element)
 		{
 			string pkg = element.GetAttribute ("catalog");
@@ -58,5 +61,14 @@ namespace Mono.Addins.Localization
 			return domain.GetPluralString (singular, defaultPlural, n);
 		}
 
+		public string GetParticularString(string context, string msgid)
+		{
+			return domain.GetString(context + GETTEXT_CONTEXT_GLUE + msgid);
+		}
+
+		public string GetParticularPluralString(string context, string msgid, string msgidPlural, int n)
+		{
+			return domain.GetPluralString(context + GETTEXT_CONTEXT_GLUE + msgid, msgidPlural, n);
+		}
 	}
 }

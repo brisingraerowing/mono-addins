@@ -298,6 +298,7 @@ namespace Mono.Addins
 			fdata.Member = member;
 			fdata.Required = at.Required;
 			fdata.Localizable = at.Localizable;
+			fdata.LocalizeContext = at.LocalizeContext;
 			
 			if (at.Name != null && at.Name.Length > 0)
 				name = at.Name;

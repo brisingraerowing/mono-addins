@@ -43,6 +43,7 @@ namespace Mono.Addins
 		Type type;
 		string typeName;
 		string description;
+		string localizeContext;
 		
 		/// <summary>
 		/// Initializes a new instance
@@ -252,6 +253,15 @@ namespace Mono.Addins
 		public bool Localizable {
 			get { return localizable; }
 			set { localizable = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public string LocalizeContext
+		{
+			get { return localizeContext; }
+			set { localizeContext = value; }
 		}
 		
 		/// <summary>

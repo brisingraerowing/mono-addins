@@ -471,7 +471,14 @@ namespace Mono.Addins
 
 				if (memberType == typeof(string)) {
 					if (f.Localizable)
-						val = GetAddinLocalizer ().GetString (at.value);
+						if (!string.IsNullOrWhiteSpace(f.LocalizeContext))
+						{
+							val = GetAddinLocalizer().GetParticularString(f.LocalizeContext, at.Value);
+						}
+						else
+						{
+							val = GetAddinLocalizer().GetString(at.value);
+						}
 					else
 						val = at.value;
 				}

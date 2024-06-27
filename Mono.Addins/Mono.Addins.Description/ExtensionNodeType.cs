@@ -68,6 +68,7 @@ namespace Mono.Addins.Description
 			public MemberInfo Member;
 			public bool Required;
 			public bool Localizable;
+			public string LocalizeContext;
 			
 			public void SetValue (object target, object val)
 			{
